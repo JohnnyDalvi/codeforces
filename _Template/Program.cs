@@ -31,41 +31,35 @@ public class Program
         int count = 0;
 
         List<TimePerStar> sortedLevels = new List<TimePerStar>();
-        while (numOfStars > 0 || count < 1000000)
+        List<TimePerStar> availableStars = new List<TimePerStar>();
+        
+        foreach (Level level in levels)
+        {
+            availableStars.AddRange(level.selfTimerPerStars);
+        }
+        availableStars.Sort();
+        // fazer a comparação com a quantidade de estrelas necessárias somente na hora de remover da lista
+        
+        while (numOfStars > 0 || count < 10000000)
         {
             count++;
-            List<TimePerStar> availableStars = new List<TimePerStar>();
-            if (numOfStars > 1)
+
+            for (int i = 0; i < availableStars.Count; i++)
             {
-                foreach (Level level in levels)
+                if (availableStars[i].stars.Length <= numOfStars && availableStars[i].isAvailable)
                 {
-                    availableStars.AddRange(level.timerPerStars);
+                    TimePerStar starToRemove = availableStars[i];
+                    numOfStars -= availableStars[i].stars.Length;
+                    starToRemove.myLevel.RemoveStar(starToRemove, availableStars);
+                    sortedLevels.Add(starToRemove); 
+                    //Console.WriteLine("Count " + count + ":");
+                    //availableStars[i].myLevel.Debug();                   
+                    break;
                 }
             }
-            else if (numOfStars == 1)
-            {
-                foreach (Level level in levels)
-                {
-                    foreach (TimePerStar star in level.timerPerStars)
-                    {
-                        if (star.stars.Length == 1)
-                        {
-                            availableStars.Add(star);
-                        }
-                    }
-                }
-            }
-            availableStars.Sort();
-            // foreach (TimePerStar star in availableStars)
-            // {
-            //     Console.WriteLine($"Level: {star.myLevel.levelNumber}, Stars: {string.Join(",", star.stars)}, Time: {star.timeToComplete}, Time per Star: {star.timePerStar}");
-            // }
-            TimePerStar bestStar = availableStars[0];
-            sortedLevels.Add(bestStar);
-            bestStar.myLevel.RemoveStar(bestStar);
-            numOfStars -= bestStar.stars.Length;
         }
         string levelConfig = "";
+        //Console.WriteLine("Final:");
         foreach (Level level in levels)
         {
             //level.Debug();
@@ -112,54 +106,59 @@ public class Level
         }
     }
     
-    public List<TimePerStar> timerPerStars;
+    public List<TimePerStar> selfTimerPerStars;
 
     public Level(int star1, int star2)
     {
         time1Star = star1;
         time2Stars = star2;
-        timerPerStars = new List<TimePerStar>();
+        selfTimerPerStars = new List<TimePerStar>();
         TimePerStar firstStarTime = new TimePerStar
         {
             myLevel = this,
             stars = new int[] { 1 },
-            timeToComplete = time1Star
+            timeToComplete = time1Star,
+            isAvailable = true
         };
         TimePerStar twoStarTimer = new TimePerStar
         {
             myLevel = this,
             stars = new int[] { 1, 2 },
-            timeToComplete = time2Stars
+            timeToComplete = time2Stars,
+            isAvailable = true
         };
-        timerPerStars.Add(firstStarTime);
-        timerPerStars.Add(twoStarTimer);
+        TimePerStar firstToTwoStarTimer = new TimePerStar
+        {
+            myLevel = this,
+            stars = new int[] { 2 },
+            timeToComplete = time2Stars - time1Star
+        };
+        selfTimerPerStars.Add(firstStarTime);
+        selfTimerPerStars.Add(twoStarTimer);
+        selfTimerPerStars.Add(firstToTwoStarTimer);
     }
 
-    public void RemoveStar(TimePerStar starToRemove)
+    public void RemoveStar(TimePerStar starToRemove, List<TimePerStar> timerPerStars)
     {
-        if (starToRemove.stars.Length == 2)
-        {
-            firstStar = false;
-            secondStar = false;
-            timerPerStars = new List<TimePerStar>();
-        }
-        else if (starToRemove.stars[0] == 1)
-        {
-            firstStar = false;
-            timerPerStars = new List<TimePerStar>();
-            TimePerStar secondStar = new TimePerStar
-            {
-                myLevel = this,
-                stars = new int[] { 2 },
-                timeToComplete = time2Stars - time1Star
-            };
-            timerPerStars.Add(secondStar);
-        }
-        else if (starToRemove.stars[0] == 2)
+       timerPerStars.Remove(starToRemove);
+        if (starToRemove.stars[0] == 2)
         {
             secondStar = false;
-            timerPerStars = new List<TimePerStar>();
         }
+        else if (starToRemove.stars.Length == 1 && starToRemove.stars[0] == 1)
+        {
+            firstStar = false;
+            selfTimerPerStars[2].isAvailable = true;
+            timerPerStars.Remove(selfTimerPerStars[1]);
+        }
+        else if (starToRemove.stars.Length == 2)
+        {
+            timerPerStars.Remove(selfTimerPerStars[0]);
+            timerPerStars.Remove(selfTimerPerStars[2]);
+            firstStar = false;
+            secondStar = false;
+        }
+        timerPerStars.Remove(starToRemove);
     }
 
     public void Debug()
@@ -179,6 +178,7 @@ public class TimePerStar : IComparable<TimePerStar>
     public int[] stars;
     public int timeToComplete;
     public float timePerStar { get { return (float)timeToComplete / stars.Length; } }
+    public bool isAvailable = false;
 }
 
 
