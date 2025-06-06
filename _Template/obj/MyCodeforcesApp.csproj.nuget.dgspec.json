@@ -1,23 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Repos\\codeforces\\codeforces\\_Template\\MyCodeforcesApp.csproj": {}
+    "C:\\Repos\\codeforces\\_Template\\MyCodeforcesApp.csproj": {}
   },
   "projects": {
-    "C:\\Repos\\codeforces\\codeforces\\_Template\\MyCodeforcesApp.csproj": {
+    "C:\\Repos\\codeforces\\_Template\\MyCodeforcesApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Repos\\codeforces\\codeforces\\_Template\\MyCodeforcesApp.csproj",
+        "projectUniqueName": "C:\\Repos\\codeforces\\_Template\\MyCodeforcesApp.csproj",
         "projectName": "MyCodeforcesApp",
-        "projectPath": "C:\\Repos\\codeforces\\codeforces\\_Template\\MyCodeforcesApp.csproj",
-        "packagesPath": "C:\\Users\\johnn\\.nuget\\packages\\",
-        "outputPath": "C:\\Repos\\codeforces\\codeforces\\_Template\\obj\\",
+        "projectPath": "C:\\Repos\\codeforces\\_Template\\MyCodeforcesApp.csproj",
+        "packagesPath": "C:\\Users\\Johnny Dalvi\\.nuget\\packages\\",
+        "outputPath": "C:\\Repos\\codeforces\\_Template\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\johnn\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Johnny Dalvi\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -65,7 +66,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.410/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

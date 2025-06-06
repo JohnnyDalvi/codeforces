@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MyCodeforcesApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b716bd53c39721951faddc7820fdde3c0be709c1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+29a024e9da9cfe6e116047d583d447a6332c505e")]
 [assembly: System.Reflection.AssemblyProductAttribute("MyCodeforcesApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MyCodeforcesApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

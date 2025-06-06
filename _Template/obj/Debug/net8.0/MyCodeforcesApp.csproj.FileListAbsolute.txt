@@ -41,3 +41,4 @@ C:\Repos\codeforces\codeforces\_Template\obj\Debug\net8.0\refint\MyCodeforcesApp
 C:\Repos\codeforces\codeforces\_Template\obj\Debug\net8.0\MyCodeforcesApp.pdb
 C:\Repos\codeforces\codeforces\_Template\obj\Debug\net8.0\MyCodeforcesApp.genruntimeconfig.cache
 C:\Repos\codeforces\codeforces\_Template\obj\Debug\net8.0\ref\MyCodeforcesApp.dll
+C:\Repos\codeforces\_Template\obj\Debug\net8.0\MyCodeforcesApp.sourcelink.json
