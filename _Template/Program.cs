@@ -2,6 +2,9 @@
 using System.IO;
 using System.Text;
 using System.Collections.Generic;
+using System;
+using System.Diagnostics;
+using System.Threading;
 
 public class Program
 {
@@ -12,10 +15,12 @@ public class Program
 
         int numOfLevels = reader.NextInt();
         int numOfStars = reader.NextInt();
+        // Stopwatch stopWatch = new Stopwatch();
+
         List<Level> levels = new List<Level>();
         for (int i = 0; i < numOfLevels; i++)
         {
-            int star1 = reader.NextInt();
+            int star1 = reader.NextInt(); 
             int star2 = reader.NextInt();
             Level level = new Level(star1, star2);
             level.levelNumber = i + 1; // Level numbers start from 1
@@ -32,32 +37,42 @@ public class Program
 
         List<TimePerStar> sortedLevels = new List<TimePerStar>();
         List<TimePerStar> availableStars = new List<TimePerStar>();
-        
+
         foreach (Level level in levels)
         {
             availableStars.AddRange(level.selfTimerPerStars);
         }
         availableStars.Sort();
         // fazer a comparação com a quantidade de estrelas necessárias somente na hora de remover da lista
-        
-        while (numOfStars > 0 || count < 10000000)
-        {
-            count++;
 
+
+        while (numOfStars > 0)
+        {
             for (int i = 0; i < availableStars.Count; i++)
             {
-                if (availableStars[i].stars.Length <= numOfStars && availableStars[i].isAvailable)
+
+                if ((numOfStars >= 2 && availableStars[i].isAvailable)|| (availableStars[i].stars.Length <= numOfStars && availableStars[i].isAvailable))
                 {
+
                     TimePerStar starToRemove = availableStars[i];
+
                     numOfStars -= availableStars[i].stars.Length;
+
                     starToRemove.myLevel.RemoveStar(starToRemove, availableStars);
-                    sortedLevels.Add(starToRemove); 
+
+                    sortedLevels.Add(starToRemove);
+
                     //Console.WriteLine("Count " + count + ":");
                     //availableStars[i].myLevel.Debug();                   
                     break;
+
                 }
-            }
+                
+            }            
+            
         }
+
+
         string levelConfig = "";
         //Console.WriteLine("Final:");
         foreach (Level level in levels)
@@ -75,6 +90,16 @@ public class Program
         // Console.WriteLine("Output: ");
         // Console.WriteLine("\n" + timeSpent + "\n" + levelConfig);
         writer.WriteLine(timeSpent + "\n" + levelConfig);
+
+        // Get the elapsed time as a TimeSpan value.
+        // TimeSpan ts = stopWatch.Elapsed;
+
+        // Format and display the TimeSpan value.
+        // string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}",
+        //     ts.Hours, ts.Minutes, ts.Seconds,
+        //     ts.Milliseconds / 10);
+        // Console.WriteLine("RunTime " + elapsedTime);
+
     }
 
 
@@ -140,7 +165,9 @@ public class Level
 
     public void RemoveStar(TimePerStar starToRemove, List<TimePerStar> timerPerStars)
     {
-       timerPerStars.Remove(starToRemove);
+        // stopWatch.Start();
+
+        timerPerStars.Remove(starToRemove);
         if (starToRemove.stars[0] == 2)
         {
             secondStar = false;
@@ -159,6 +186,7 @@ public class Level
             secondStar = false;
         }
         timerPerStars.Remove(starToRemove);
+        
     }
 
     public void Debug()
