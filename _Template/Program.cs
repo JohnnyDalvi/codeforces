@@ -43,21 +43,26 @@ public class Program
             availableStars.AddRange(level.selfTimerPerStars);
         }
         availableStars.Sort();
+        // foreach (TimePerStar star in availableStars)
+        // {
+        //     star.Debug();
+        // }
         // fazer a comparação com a quantidade de estrelas necessárias somente na hora de remover da lista
 
-
-        while (numOfStars > 0)
+        int totalInteractions = 0;
+        while (numOfStars > 2)
         {
             for (int i = 0; i < availableStars.Count; i++)
             {
+                totalInteractions++;
 
-                if ((numOfStars >= 2 && availableStars[i].isAvailable)|| (availableStars[i].stars.Length <= numOfStars && availableStars[i].isAvailable))
+                if (availableStars[i].isAvailable)
                 {
 
                     TimePerStar starToRemove = availableStars[i];
-
+                    starToRemove.Debug();
                     numOfStars -= availableStars[i].stars.Length;
-
+                    Console.WriteLine("number of stars: " + numOfStars);
                     starToRemove.myLevel.RemoveStar(starToRemove, availableStars);
 
                     sortedLevels.Add(starToRemove);
@@ -71,18 +76,92 @@ public class Program
             }            
             
         }
+                
+        if (numOfStars == 2)
+        {
+            Console.WriteLine("Here1");
+            for (int i = 0; i < availableStars.Count; i++)
+            {
+
+                totalInteractions++;
+                TimePerStar starToRemove = availableStars[i];
+                if (starToRemove.isAvailable && starToRemove.stars.Length == 2)
+                {
+                    Console.WriteLine("Here2");
+                    numOfStars -= starToRemove.stars.Length;
+                    starToRemove.myLevel.RemoveStar(starToRemove, availableStars);
+                    sortedLevels.Add(starToRemove);
+                }
+                else
+                {
+                    Console.WriteLine("Here3");                
+                    int totalCostForDouble1 = starToRemove.timeToComplete;
+                    int totalCostForSingle2 = 999999;
+                    TimePerStar[] starToRemoveDouble1 = new TimePerStar[2];
+                    TimePerStar starToRemoveSingle2 = new TimePerStar();
+                    starToRemoveDouble1[0] = starToRemove;
+                    for (int j = i + 1; j < availableStars.Count; j++)
+                    {
+
+                        if (starToRemoveDouble1[1] == null && availableStars[j].isAvailable && availableStars[i].stars.Length == 1 && totalCostForSingle2 > 0)
+                        {
+                            Console.WriteLine("Here4");
+                            starToRemoveDouble1[1] = availableStars[j];
+                            totalCostForDouble1 = totalCostForDouble1 + availableStars[j].timeToComplete;
+                            if (totalCostForSingle2 < 999999)
+                                break;
+                        }
+                        else if (starToRemoveSingle2 == null &&availableStars[j].isAvailable && totalCostForDouble1 > starToRemove.timeToComplete)
+                        {
+                            Console.WriteLine("Here5");
+                            starToRemoveSingle2 = availableStars[j];
+                            totalCostForSingle2 = availableStars[j].timeToComplete;
+                            if (totalCostForDouble1 > starToRemove.timeToComplete)
+                                break;
+                        }
+                    }
+                    Console.WriteLine("Total cost for double1: " + totalCostForDouble1 + " Total cost for single2: " + totalCostForSingle2);
+                    if (totalCostForDouble1 < totalCostForSingle2)
+                    {
+                        Console.WriteLine("Here6");
+                        numOfStars -= starToRemoveDouble1[0].stars.Length + starToRemoveDouble1[1].stars.Length;
+                        Console.WriteLine("Star To Remove Double 1: ");
+                        starToRemoveDouble1[0].Debug();
+                        Console.WriteLine("Star To Remove Double 2: ");
+                        starToRemoveDouble1[1].Debug();
+                        starToRemove.myLevel.RemoveStar(starToRemoveDouble1[0], availableStars);
+                        starToRemove.myLevel.RemoveStar(starToRemoveDouble1[1], availableStars);
+                        sortedLevels.Add(starToRemoveDouble1[0]);
+                        sortedLevels.Add(starToRemoveDouble1[1]);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Here7");
+                        numOfStars -= starToRemoveSingle2.stars.Length;
+                        starToRemove.myLevel.RemoveStar(starToRemoveSingle2, availableStars);
+                        sortedLevels.Add(starToRemoveSingle2);
+                    }
+
+                    break;
+
+                }
+            }
+        }
+
+        //Console.WriteLine("Total Interactions: " + totalInteractions);
 
 
         string levelConfig = "";
         //Console.WriteLine("Final:");
         foreach (Level level in levels)
         {
-            //level.Debug();
+            level.Debug();
             levelConfig += $"{2 - level.availableStars}";
         }
         int timeSpent = 0;
         foreach (TimePerStar star in sortedLevels)
         {
+            star.Debug();
             timeSpent += star.timeToComplete;
         }
         // Console.WriteLine("Total Time Spent: " + timeSpent);
@@ -207,6 +286,11 @@ public class TimePerStar : IComparable<TimePerStar>
     public int timeToComplete;
     public float timePerStar { get { return (float)timeToComplete / stars.Length; } }
     public bool isAvailable = false;
+
+    public void Debug()
+    {
+        Console.WriteLine($"Level: {myLevel.levelNumber}, Stars: {string.Join(",", stars)}, Time: {timePerStar}");
+    }
 }
 
 
